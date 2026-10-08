@@ -1,0 +1,143 @@
+--1. Tabla departamento
+CREATE TABLE departamento (
+    Dept CHAR(4) NOT NULL PRIMARY KEY,
+    Dedif CHAR(2) NOT NULL,
+    Ddespacho INTEGER NOT NULL,
+    Dchfno CHAR(3)
+);
+
+INSERT INTO departamento VALUES ('THEO', 'HU', 200, '10');
+INSERT INTO departamento VALUES ('CIS', 'SC', 300, '80');
+INSERT INTO departamento VALUES ('D.G', 'SC', 100, NULL);
+INSERT INTO departamento VALUES ('PHIL', 'HU', 100, '60');
+
+--2. Tabla curso
+CREATE TABLE curso (
+    Cno CHAR(3) NOT NULL PRIMARY KEY,
+    Cnombre CHAR(22) NOT NULL,
+    Cdescp CHAR(25) NOT NULL,
+    Cred INTEGER NOT NULL,
+    Ctarifa NUMBER NOT NULL,
+    Cdept CHAR(4) NOT NULL REFERENCES departamento (Dept)
+);
+
+INSERT INTO curso VALUES ('C11', 'INTROD. A LAS CC.', 'PARA NOVATOS', 3, 100, 'CIS');
+INSERT INTO curso VALUES ('C22', 'ESTRUC. DE DATOS', 'MUY UTIL', 3, 50, 'CIS');
+INSERT INTO curso VALUES ('C33', 'MATEMÁTICAS DISCRETAS', 'ABSOLUTAMENTE NECESARIO', 3, 0, 'CIS');
+INSERT INTO curso VALUES ('C44', 'CIRCUITOS DIGITALES', ' AH HA!!', 3, 0, 'CIS');
+INSERT INTO curso VALUES ('C55', 'ARQUITECT. COMPUTADOR', 'MAQ. VON NEUMANN', 3, 100, 'CIS');
+INSERT INTO curso VALUES ('C66', 'BASES DE DATOS RELAC.', 'IMPRESCINDIBLE', 3, 500, 'CIS');
+INSERT INTO curso VALUES ('P11', 'EMPIRISMO', 'VERLO PARA CREERLO', 3, 100, 'PHIL');
+INSERT INTO curso VALUES ('P22', 'RACIONALISMO', 'PARA USAR LOS CIS', 3, 50, 'PHIL');
+INSERT INTO curso VALUES ('P33', 'EXISTENCIALISMO', 'PARA USAR LOS CIS', 3, 200, 'PHIL');
+INSERT INTO curso VALUES ('P44', 'SOLIPSISMO', 'PARA MI MISMO', 6, 0, 'PHIL');
+INSERT INTO curso VALUES ('T11', 'ESCOLASTICISMO', 'PARA BEATOS', 3, 150, 'THEO');
+INSERT INTO curso VALUES ('T22', 'FUNDAMENTALISMO', 'PARA DESCUIDADOS', 3, 90, 'THEO');
+INSERT INTO curso VALUES ('T33', 'HEONDISMO', 'PARA SANOS', 3, 0, 'THEO');
+INSERT INTO curso VALUES ('T44', 'COMUNISMO', 'PARA AVAROS', 6, 200, 'THEO');
+
+--3. Tabla claustro
+CREATE TABLE claustro (
+    Fno CHAR(3) NOT NULL PRIMARY KEY,
+    Fnombre CHAR(15) NOT NULL,
+    Fdomi CHAR(20) NOT NULL,
+    Fecanti DATE NOT NULL,
+    Fnumdep INTEGER,
+    Fsueldo NUMBER NOT NULL,
+    Fdept CHAR(4) NOT NULL REFERENCES departamento (Dept)
+);
+
+INSERT INTO claustro VALUES ('06', 'KATHY PEP', 'CALLE LA PIEDRA, 7', TO DATE('15-01-1979', 'DD-MM-YYYY'), 2, 35000, 'PHIL');
+INSERT INTO claustro VALUES ('10', 'JESSUE MARTIN', 'DR. DEL ESTE, 4', TO DATE('01-09-1969', 'DD-MM-YYYY'), 2, 45000, 'THEO');
+INSERT INTO claustro VALUES ('08', 'JOE COHEN', 'AP. CORREOS 1138', TO DATE('09-07-1979', 'DD-MM-YYYY'), 2, 35000, 'CIS');
+INSERT INTO claustro VALUES ('85', 'AL HARTLEY', 'CALLE DE LA PLATA', TO DATE('05-09-1979', 'DD-MM-YYYY'), 7, 45000, 'CIS');
+INSERT INTO claustro VALUES ('60', 'JULIA MARTIN', 'DR. DEL ESTE, 4', TO DATE('01-09-1969', 'DD-MM-YYYY'), 1, 45000, 'PHIL');
+INSERT INTO claustro VALUES ('65', 'LISA BORAK', 'CAMINO RISA, 77', TO DATE('06-09-1981', 'DD-MM-YYYY'), 0, 36000, 'THEO');
+INSERT INTO claustro VALUES ('80', 'BARB HAWTH', 'CALLE DEL SUR, 489', TO DATE('16-01-1982', 'DD-MM-YYYY'), 3, 35000, 'CIS');
+
+--4. Tabla clase
+CREATE TABLE clase (
+    Cno CHAR(3) NOT NULL REFERENCES curso (Cno),
+    Sec CHAR(2) NOT NULL,
+    Cinstrfno CHAR(2) NOT NULL,
+    Cdia CHAR(2) NOT NULL,
+    Chora CHAR(14) NOT NULL,
+    Cedif CHAR(2) NOT NULL,
+    Cdespacho INTEGER NOT NULL,
+    CONSTRAINT clase_Cno_Sec PRIMARY KEY (Cno, Sec)
+);
+
+INSERT INTO clase VALUES ('C11', '01', '08', 'LU', '08:00-09:00 AM', 'SC', 305);
+INSERT INTO clase VALUES ('C11', '02', '08', 'MA', '08:00-09:00 AM', 'SC', 306);
+INSERT INTO clase VALUES ('C33', '01', '80', 'MI', '09:00-10:00 AM', 'SC', 305);
+INSERT INTO clase VALUES ('C55', '01', '85', 'JU', '11:00-12:00 AM', 'HU', 306);
+INSERT INTO clase VALUES ('P11', '01', '06', 'JU', '09:00-10:00 AM', 'HU', 102);
+INSERT INTO clase VALUES ('P33', '01', '06', 'VI', '11:00-12:00 AM', 'HU', 201);
+INSERT INTO clase VALUES ('T11', '01', '10', 'LU', '10:00-11:00 AM', 'HU', 101);
+INSERT INTO clase VALUES ('T11', '02', '65', 'LU', '10:00-11:00 AM', 'HU', 102);
+INSERT INTO clase VALUES ('T33', '01', '65', 'MI', '11:00-12:00 AM', 'HU', 101);
+
+--5. Tabla estudiante
+CREATE TABLE estudiante (
+    Sno     CHAR(3) NOT NULL PRIMARY KEY,
+    Snombre CHAR(30) NOT NULL,
+    Sdomi   CHAR(15) NOT NULL,
+    Stlfno  CHAR(12) NOT NULL,
+    Sfnacim CHAR(6) NOT NULL,
+    Siq     INTEGER NOT NULL,
+    Sadvfno CHAR (3) NOT NULL,
+    Sesp    CHAR (4) NOT NULL REFERENCES departamento (Dept)
+);
+
+INSERT INTO estudiante VALUES ('325', 'CURLEY DUBAY', 'CONNECTICUT', '204-124-4567', '780517', 122, '10', 'THEO');
+INSERT INTO estudiante VALUES ('150', 'LARRY DUBAY', 'CONNECTICUT', '204-124-4567', '780517', 121, '80', 'CIS');
+INSERT INTO estudiante VALUES ('100', 'MOE DUBAY', 'CONNECTICUT', '204-124-4567', '780517', 120, '10', 'THEO');
+INSERT INTO estudiante VALUES ('800', 'ROCKY BALBOA', 'PENSYLVANIA', '112-112-1122', '461004', 99, '60', 'PHIL');
+
+--6. Tabla matricula
+CREATE TABLE matricula (
+    Cno CHAR(3) NOT NULL,
+    Sec CHAR(2) NOT NULL,
+    Sno CHAR(3) NOT NULL,
+    Fecha_mat DATE NOT NULL,
+    Hora_mat CHAR(10) NOT NULL,
+    CONSTRAINT matricula_Cno_Sec_Sno PRIMARY KEY (Cno, Sec, Sno)
+);
+
+INSERT INTO matricula VALUES ('C11', '01', '325', TO_DATE('04-01-1987','DD-MM-YYYY'), '09.41.30');
+INSERT INTO matricula VALUES ('C11', '01', '800', TO_DATE('15-12-1987','DD-MM-YYYY'), '11.49.00');
+INSERT INTO matricula VALUES ('C11', '02', '100', TO_DATE('17-12-1987','DD-MM-YYYY'), '09.32.00');
+INSERT INTO matricula VALUES ('C11', '02', '150', TO_DATE('17-12-1987','DD-MM-YYYY'), '09.32.30');
+INSERT INTO matricula VALUES ('P33', '01', '100', TO_DATE('24-12-1987','DD-MM-YYYY'), '11.30.00');
+INSERT INTO matricula VALUES ('P33', '01', '800', TO_DATE('24-12-1987','DD-MM-YYYY'), '11.23.00');
+INSERT INTO matricula VALUES ('T11', '01', '100', TO_DATE('24-12-1987','DD-MM-YYYY'), '11.21.00');
+INSERT INTO matricula VALUES ('T11', '01', '150', TO_DATE('15-12-1987','DD-MM-YYYY'), '11.35.30');
+INSERT INTO matricula VALUES ('T11', '01', '800', TO_DATE('15-12-1987','DD-MM-YYYY'), '14.00.00');
+
+COMMIT;
+
+SELECT Dept, Dedif, Ddespacho 
+FROM departamento 
+WHERE Dedif = 'SC';
+
+SELECT Cno, Cnombre, Cred, Ctarifa 
+FROM curso 
+WHERE Cred > 3
+ORDER BY Cnombre;
+
+SELECT Fnombre, Fsueldo, Fdept 
+FROM claustro 
+WHERE Fsueldo > 35000 
+ORDER BY Fsueldo DESC;
+
+SELECT Cno, Sec, Cdia, Chora, Cedif 
+FROM clase 
+WHERE Cdia IN ('LU', 'MI');
+
+SELECT Sno, Snombre, Siq, Sesp 
+FROM estudiante 
+WHERE Siq > 100;
+
+SELECT Sno, Cno, Fecha_mat, Hora_mat 
+FROM matricula 
+ORDER BY Fecha_mat DESC, Hora_mat ASC;
